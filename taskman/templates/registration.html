@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block container %}
+<form action="{% url 'register'  %}" method="post">
+    {% csrf_token %}
+    {{ form.error }}{{ form.message }}
+    {{ form.username }}
+    {{ form.email }}
+    {{ form.confirm }}
+    {{ form.password }}
+    <input type="submit" value="Submit" />
+
+{% endblock %}
