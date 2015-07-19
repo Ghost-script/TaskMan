@@ -1,4 +1,73 @@
-{% extends 'base.html' %}
-{% block container %}
-<p>Home</p>
-{% endblock %}
+{% extends 'home_base.html' %}
+{% block maincontent %}
+<div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-2 main">
+          <h1 class="page-header">Dashboard</h1>
+
+          <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+          </div>
+    <h2 class="sub-header">Task List</h2>
+    <form action="" method="POST">
+    <div class="form-inline">
+      <div class="form-group col-md-offset-9">
+        <select class="form-control col-">
+        <option selected >-----</option>
+        <option value="DELETE">Delete</option>
+        <option value="COMPLETE">Mark Complete</option>
+        <option value="INCOMPLETE">Mark Incomplete</option>
+        </select>
+        {% csrf_token %}
+        <button type="submit" class="btn btn-info">Go</button>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Date Added</th>
+            <th>Complete By</th>
+            <th>Mark <input type="checkbox" name="select_all" value="true"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for task in tasks %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ task.title }}</td>
+            <td>{{ task.status }}</td>
+            <td>{{ task.added_date|date:"d M, Y"  }}</td>
+            <td>{{ task.deadline_date|date:"d M, Y"  }}</td>
+            <td><input type="checkbox" name="task_selected" value="task.id"/></td>
+          </tr>
+          
+          {% endfor %}
+          </form>
+        </tbody>
+      </table>
+    </div>
+  </div>
+    {% endblock %}
+
+

@@ -21,5 +21,8 @@ urlpatterns = [
     url(r'^$', 'taskman.views.index' , name="index"),
     url(r'^register/$', 'taskman.views.register_user' , name="register"),
     url(r'^home/$', 'taskman.views.dashboard', name="home" ),
+    url(r'^home/create/$', 'taskManager.views.create_task', name="create" ),
+    url(r'^delete/$', 'taskManager.views.delete_task', name="delete" ),
+    url(r'^update/$', 'taskManager.views.update_task', name="update" ),
     url(r'^logout/$', 'taskman.views.logout_user', name="logout" ),
 ]

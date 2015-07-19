@@ -3,7 +3,8 @@ from forms import LoginForm,RegistrationForm
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
+from taskManager.forms import TaskCreate,TaskRemove,TaskUpdateStatus,TaskUpdateDeadline
+from taskManager.views import show_task,show_logs
 
 def index(request):
     
@@ -16,7 +17,8 @@ def index(request):
             if user is not None:
                 login(request, user)
                 return redirect('home')
-            form.error = "email/password missmatch"
+
+            form.message = "email/password mismatch"
             return render(request,'index.html',{'form' : form})
             
     else:
@@ -32,13 +34,19 @@ def register_user(request):
             email =  form.cleaned_data['email']
             password = form.cleaned_data['password']
             try:
+            	user = User.objects.get(email=email)
+                form.message = "email already registered"
+            	return render(request,'registration.html',{'form' : form})		
+            except User.DoesNotExist:
             	user = User(username=username,email=email,password=password)
             	user.save()
+                form.message="Success"
+                return render(request,'registration.html',{'form' : form})  
             except Exception as e:
             	print e
-            form.message="Success"
-            return render(request,'registration.html',{'form' : form})	
+            
     	else:
+            form.error="error"
             return render(request,'registration.html',{'form' : form})			 	       
     else:
         form = RegistrationForm()
@@ -46,7 +54,13 @@ def register_user(request):
 
 @login_required(login_url="/")
 def dashboard(request):
-	return render(request,'dashboard.html',{})
+    form = TaskCreate()
+    form2= TaskRemove()
+    form3= TaskUpdateDeadline()
+    form4= TaskUpdateStatus()
+    task = show_task(request)
+    logs = show_logs(request)
+    return render(request,'dashboard.html',{'form':form,'form2':form2,'form3':form3,'form4':form4,'tasks':task,'logs':logs})
 
 def logout_user(request):
 	logout(request)

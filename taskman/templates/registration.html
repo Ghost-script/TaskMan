@@ -2,11 +2,14 @@
 {% block container %}
 <form action="{% url 'register'  %}" method="post">
     {% csrf_token %}
-    {{ form.error }}{{ form.message }}
-    {{ form.username }}
-    {{ form.email }}
-    {{ form.confirm }}
-    {{ form.password }}
+    {{ form.error }}
+    {{ form.message }}
+    
+    {{ form.username }}{{ form.username.errors }}
+    
+    {{ form.email }} {{ form.email.errors }}
+    {{ form.confirm }} 
+    {{ form.password }} {{ form.username.errors }}
     <input type="submit" value="Submit" />
 
 {% endblock %}
