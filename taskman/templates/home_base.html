@@ -3,8 +3,6 @@
 {% block container %}
 	<script src="/static/datetimepicker/jquery.datetimepicker.js"></script>
 
-  <script src="/static/js/custom.js"></script>
-
 <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -18,9 +16,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
+            <li><a href="{% url 'home' %}">Dashboard</a></li>
+            
             <li><a href="{% url 'logout' %}">Logout</a></li>
           </ul>
           <form class="navbar-form navbar-right">
@@ -33,16 +30,14 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar sidebar-left">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="/home">Tasks<span class="sr-only">(current)</span></a></li>
-            <li><a href="/home/create/">Create New</a></li>
-            <li><a href="#">Edit</a></li>
-            <li><a href="#">Export</a></li>
+            <li {% if page == 'home' %} class="active" {% endif %}><a href="/home">Tasks<span class="sr-only">(current)</span></a></li>
+            <li {% if page == 'create' %} class="active" {% endif %}><a href="{% url 'create' %}">Create New</a></li>
           </ul>
           
         </div>
     {% block maincontent %}{%endblock%}    
 		    </div>
-
+        {% block tracker %}
         <div class="col-sm-3 col-md-2 sidebar sidebar-right">
         <ul class="nav nav-sidebar">
         <li><h4>Tracker</h4></li>
@@ -51,6 +46,7 @@
         {% endfor %}
         </ul>
     </div>
+    {% endblock %}
   </div>
 
 

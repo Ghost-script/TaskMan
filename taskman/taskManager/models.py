@@ -14,7 +14,7 @@ class Task(models.Model):
         a = super(Task, self).save(*args, **kwargs)
         print a,kwargs,args
 
-        log = TaskLog(user=self.user,task=self.title,action="CREATE")
+        log = TaskLog(user=self.user,task=self.title,action="CREATE",row_affected=1)
         log.save()
         
 
@@ -26,17 +26,18 @@ class TaskLog(models.Model):
     user = models.ForeignKey(User)
     task = models.CharField(max_length=100)
     action = models.CharField(max_length=20)
+    row_affected = models.IntegerField()
 
     def __str__(self):
         if self.action == "CREATE":
             temp= "{task} was {action}d by you"
         if self.action in ['INCOMPLETE','COMPLETE']:
-            if self.task == '1':
+            if self.row_affected == 1:
                 temp = "{task} task was marked {action} by you"
             else:
                 temp = "{task} tasks were marked {action} by you"
         if self.action == "DELETE":
-            if self.task == '1':
+            if self.task == 1:
                 temp = "{task} task was {action}d by you"
             else:
                 temp = "{task} tasks were {action}d by you"

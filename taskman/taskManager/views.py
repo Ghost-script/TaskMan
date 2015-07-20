@@ -6,7 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from forms import TaskCreate,TaskRemove,TaskUpdateDeadline,MultipleSelect
 from datetime import datetime
-
+from django.db.models import Q
+from django.views.decorators.http import require_http_methods
 @login_required(login_url='/login')
 def create_task(request):
     """
@@ -23,30 +24,26 @@ def create_task(request):
             deadline = form.cleaned_data['complete_by']
             added = timezone.now()
             detail = form.cleaned_data['details']
-            new_task = Task(user=user,title=title,detail=detail,status=status,
+            try:
+                new_task = Task(user=user,title=title,detail=detail,status=status,
                             deadline_date=deadline,added_date=added)
-            new_task.save()
+                new_task.save()
+                form = TaskCreate()
+                form.message = "Succesfully created the task"
+            except IntegrityError:
+                form.error = "Duplicate Title Not Allowed"
+        return render(request,"create_task.html",{'form':form,'page':'create'})            
     form = TaskCreate()
-    form.message = "Succesfully created the task"
-    return render(request,"create_task.html",{'form':form})
-"""
-@login_required(login_url='/login')
-def delete_task(request):
-    if request.method == 'POST':
-        form = TaskRemove(request.POST)
-        form2 = TaskCreate()
-        if form.is_valid():
-            user = request.user
-            title = form.cleaned_data['title']
-            task = Task.objects.get(user=user,title=title).delete()
+    return render(request,"create_task.html",{'form':form,'page':'create'})
 
-        return render(request,"dashboard.html",{'form':form1,'form2':form2})
-"""
 
 @login_required(login_url='/login')
 def update_task(request):
+    """
+    Edit task #to be implemented
+    """
     if request.method == 'POST':
-        form2 = TaskCreate(request.POST)
+        form = TaskCreate(request.POST)
         if form.is_valid(): 
             user = request.user
             title = form.cleaned_data['title']
@@ -54,7 +51,7 @@ def update_task(request):
             task = Task.objects.get(user=user,title=title)
             task.deadline_date = deadline
             task.save()
-        return render(request,"dashboard.html",{'form2':form2})
+        return render(request,"dashboard.html",{'form':form})
 
 def show_task(request,**kwargs):
     """
@@ -81,7 +78,7 @@ def show_logs(request):
     log = TaskLog.objects.filter(user=user).order_by('-id').all()
     return log
 
-
+require_http_methods(["POST"])
 def update_multiple(request):
     """
     Updating/Deleting Multiple Tasks
@@ -89,28 +86,26 @@ def update_multiple(request):
 
     if request.method == 'POST':
         form=MultipleSelect(request.POST)
-        for er in form.errors:
-            print form.errors['task_selected']
         if form.is_valid():
             action = request.POST.get('action')
-            task_list = request.POST.getlist('task_selected')
+            task_list = form.cleaned_data['task_selected']
             if action != "DELETE":
-                no_of_updates = Task.objects.filter(title__in=task_list).update(status=action)
+                no_of_updates = Task.objects.filter(id__in=task_list).update(status=action)
             else:
-                Task.objects.filter(title__in=task_list).delete()
+                Task.objects.filter(id__in=task_list).delete()
                 no_of_updates=len(task_list)
-            if no_of_updates > 2:
-                temp="{task1},{task2} and {others} other"
-            elif no_of_updates ==2:
-                temp="{task1} and {task2}"
+            
+            task_list = Task.objects.filter(id__in=task_list).all()
+            if no_of_updates > 1:
+                temp="{task1} and {others} other"
             elif no_of_updates ==1:
                 temp="{task1}"
             else:
                 return redirect('home')
-            task = temp.format(task1=task_list[0],task2=task_list[1],others=len(task_list)-2)
-            obj = TaskLog(user=request.user,task=task,action=action)
-            obj.save()
+            
+            task = temp.format(task1=task_list[0].title,others=len(task_list)-1)
+            obj = TaskLog(user=request.user,task=task,action=action,row_affected=no_of_updates)
+            obj.save()     
             return redirect('home')
-    
         else:
-            return HttpResponse("tsetj")
+            return HttpResponse("Invalid Form Data")

@@ -2,7 +2,9 @@ from django.contrib.auth.models import User , check_password
 from django.contrib.auth.backends import ModelBackend
 
 class EmailAuth(ModelBackend):
-	
+	"""
+	Custom Backend to support authentication via Email and Password
+	"""
 	def authenticate(self,email=None, password=None):
 		try:
 			user_obj = User.objects.get(email=email)

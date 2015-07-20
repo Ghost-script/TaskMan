@@ -3,7 +3,7 @@ from forms import LoginForm,RegistrationForm
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from taskManager.forms import TaskCreate,TaskRemove,TaskUpdateDeadline
+from taskManager.forms import TaskCreate,TaskRemove,TaskUpdateDeadline,MultipleSelect
 from taskManager.views import show_task,show_logs
 
 def index(request):
@@ -25,12 +25,14 @@ def index(request):
                     form.message = "Email/Password Mismatch"
                     return render(request,'index.html',{'form' : form})
             form.message = "Email not found"
-            return render(request,'index.html',{'form' : form})
-            
+            return render(request,'index.html',{'form' : form,'page':'index'})
+        else:
+            form.message = "Invalid Email"
+            return render(request,'index.html',{'form' : form,'page':'index'})
     else:
         form = LoginForm()
 
-    return render(request,'index.html',{'form' : form})
+    return render(request,'index.html',{'form' : form,'page':'index'})
 
 def register_user(request):
     """
@@ -56,16 +58,17 @@ def register_user(request):
                     form.message="Success"
                 else:
                     form.message="Comfirm and Password field do not match"
-                return render(request,'registration.html',{'form' : form})  
+                return render(request,'registration.html',{'form' : form,'page':'reg'})  
             except Exception as e:
             	#logging be implemented here
                 print e
             
     	else:
-            return render(request,'registration.html',{'form' : form})			 	       
+            form.error="Invalid form feild Values"
+            return render(request,'registration.html',{'form' : form,'page':'reg'})			 	       
     else:
         form = RegistrationForm()
-    return render(request,'registration.html',{'form' : form})	
+    return render(request,'registration.html',{'form' : form,'page':'reg'})	
 
 @login_required(login_url="/")
 def dashboard(request):
@@ -78,7 +81,8 @@ def dashboard(request):
     order=request.GET.get('order','asc')
     task = show_task(request,col=col,order=order)
     logs = show_logs(request)
-    return render(request,'dashboard.html',{'tasks':task,'logs':logs})
+    form = MultipleSelect()
+    return render(request,'dashboard.html',{'tasks':task,'logs':logs,'form':form,'page':'home'})
 
 def logout_user(request):
     """
