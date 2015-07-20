@@ -18,7 +18,7 @@ def index(request):
                 login(request, user)
                 return redirect('home')
 
-            form.message = "email/password mismatch"
+            form.message = "Email/Password Mismatch"
             return render(request,'index.html',{'form' : form})
             
     else:
@@ -33,20 +33,21 @@ def register_user(request):
             username = form.cleaned_data['username']
             email =  form.cleaned_data['email']
             password = form.cleaned_data['password']
+            confirm = form.cleaned_data['confirm']
             try:
             	user = User.objects.get(email=email)
-                form.message = "email already registered"
+                form.error = "Email already registered!"
             	return render(request,'registration.html',{'form' : form})		
             except User.DoesNotExist:
             	user = User(username=username,email=email,password=password)
             	user.save()
+                form = RegistrationForm()
                 form.message="Success"
                 return render(request,'registration.html',{'form' : form})  
             except Exception as e:
             	print e
             
     	else:
-            form.error="error"
             return render(request,'registration.html',{'form' : form})			 	       
     else:
         form = RegistrationForm()
@@ -54,13 +55,11 @@ def register_user(request):
 
 @login_required(login_url="/")
 def dashboard(request):
-    form = TaskCreate()
-    form2= TaskRemove()
-    form3= TaskUpdateDeadline()
-    form4= TaskUpdateStatus()
-    task = show_task(request)
+    col=request.GET.get('sortby','id')
+    order=request.GET.get('order','asc')
+    task = show_task(request,col=col,order=order)
     logs = show_logs(request)
-    return render(request,'dashboard.html',{'form':form,'form2':form2,'form3':form3,'form4':form4,'tasks':task,'logs':logs})
+    return render(request,'dashboard.html',{'tasks':task,'logs':logs})
 
 def logout_user(request):
 	logout(request)

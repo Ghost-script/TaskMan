@@ -15,7 +15,10 @@ class TaskCreate(forms.Form):
 							widget=forms.DateTimeInput(
 								attrs={'id':"datetimepicker",
 								'class':'form-control'}))
-
+"""
+class MultipleSelect(forms.Forms):
+	task_selected = forms.CheckboxField()
+"""
 class TaskRemove(forms.Form):
 	title = forms.CharField(label="Title",max_length=100,widget=forms.TextInput(attrs={'required':'true'}))
 

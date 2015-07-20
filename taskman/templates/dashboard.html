@@ -2,7 +2,7 @@
 {% block maincontent %}
 <div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-2 main">
           <h1 class="page-header">Dashboard</h1>
-
+<!--
           <div class="row placeholders">
             <div class="col-xs-6 col-sm-3 placeholder">
               <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
@@ -25,11 +25,12 @@
               <span class="text-muted">Something else</span>
             </div>
           </div>
+  -->
     <h2 class="sub-header">Task List</h2>
-    <form action="" method="POST">
+    <form action="{% url 'updatemultiple' %}" method="POST">
     <div class="form-inline">
       <div class="form-group col-md-offset-9">
-        <select class="form-control col-">
+        <select name="action" class="form-control col-">
         <option selected >-----</option>
         <option value="DELETE">Delete</option>
         <option value="COMPLETE">Mark Complete</option>
@@ -44,10 +45,10 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Title</th>
-            <th>Status</th>
-            <th>Date Added</th>
-            <th>Complete By</th>
+            <th><a href="{% url 'home' %}?sortby=title&amp;order=asc" id="title_head" >Title</a></th>
+            <th><a href="{% url 'home' %}?sortby=status&amp;order=asc" id="status_head">Status</th>
+            <th><a href="{% url 'home' %}?sortby=added_date&amp;order=asc" id="added_date_head">Date Added</th>
+            <th><a href="{% url 'home' %}?sortby=deadline_date&amp;order=asc" id="deadline_date_head">Complete By</th>
             <th>Mark <input type="checkbox" name="select_all" value="true"></th>
           </tr>
         </thead>
@@ -59,7 +60,7 @@
             <td>{{ task.status }}</td>
             <td>{{ task.added_date|date:"d M, Y"  }}</td>
             <td>{{ task.deadline_date|date:"d M, Y"  }}</td>
-            <td><input type="checkbox" name="task_selected" value="task.id"/></td>
+            <td><input type="checkbox" name="task_selected" value="{{ task.id }}"/></td>
           </tr>
           
           {% endfor %}

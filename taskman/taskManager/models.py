@@ -7,16 +7,38 @@ class Task(models.Model):
     status = models.CharField(max_length=20)
     deadline_date = models.DateTimeField('deadline_date')
     added_date = models.DateTimeField('added_date')
-    
     detail = models.TextField()
     
+
+    def save(self,*args,**kwargs):
+        a = super(Task, self).save(*args, **kwargs)
+        print a,kwargs,args
+
+        log = TaskLog(user=self.user,task=self.title,action="CREATE")
+        log.save()
+        
+
     def __str__(self):              # __unicode__ on Python 2
         return self.title
 
 
 class TaskLog(models.Model):
-	task = models.ForeignKey(Task)
-	action = models.CharField(max_length=20)
+    user = models.ForeignKey(User)
+    task = models.CharField(max_length=100)
+    action = models.CharField(max_length=20)
 
-	def __str__(self):              # __unicode__ on Python 2
-		return "{task} was {action} by you".format(task=self.task.title,action=self.action.lower(),user=self.task.user)
+    def __str__(self):
+        if self.action == "CREATE":
+            temp= "{task} was {action}d by you"
+        if self.action in ['INCOMPLETE','COMPLETE']:
+            if self.task == '1':
+                temp = "{task} task was marked {action} by you"
+            else:
+                temp = "{task} tasks were marked {action} by you"
+        if self.action == "DELETE":
+            if self.task == '1':
+                temp = "{task} task was {action}d by you"
+            else:
+                temp = "{task} tasks were {action}d by you"
+        
+        return temp.format(task=self.task,action=self.action.lower(),user=self.user)

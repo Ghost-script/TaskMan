@@ -12,7 +12,8 @@
           	<ul class="dropdown-menu">
             	
 					<form class="form-horizontal container-fluid" id="login_form" action="/" method="post">
-					  <div class="form-group">
+					  {{ form.message }}
+            <div class="form-group">
 					  {% csrf_token %}
 
 					    <label for="exampleInputName2" class="sr-only">{{ form.email.label }}</label>
@@ -39,7 +40,7 @@
       <div class="jumbotron">
         <h1>TaskMan</h1>
         <p class="lead">This is a Task Management Application for Demo Purpose.</p>
-        <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>
+        <p><a class="btn btn-lg btn-success" href="{% url 'register' %}" role="button">Sign up today</a></p>
       </div>
 
       <div class="row marketing">

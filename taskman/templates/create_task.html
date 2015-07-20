@@ -3,20 +3,20 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-8 col-md-offset-2 main">
           <h1 class="page-header">Dashboard</h1>
 
-<form class="form-horizontal container-fluid" id="login_form" action="/" method="post">
+<form class="form-horizontal container-fluid"  action="" method="post">
  <div class="form-inline">
  <div class="form-group">
   {% csrf_token %}
-  <label for="exampleInputName2">{{ form.title.label }}</label>
+  <label for="title">{{ form.title.label }}</label>
   {{ form.title }}
   
-  <label for="exampleInputName2">{{ form.complete_by.label}}</label>
+  <label for="complete_by">{{ form.complete_by.label}}</label>
   {{ form.complete_by}}
  </div>
 
 </div>
  <div class="form-group">
-	<label for="exampleInputEmail2">{{ form.details.label }}</label>
+	<label for="details">{{ form.details.label }}</label>
 	{{ form.details }}
  </div>
  <div class="form-group pull-right">
