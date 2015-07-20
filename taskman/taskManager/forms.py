@@ -1,4 +1,5 @@
 from django import forms
+from models import Task
 
 STATUS_CHOICES = (("INCOMPLETE","incomplete"),
 					("COMPLETE","complete"),)
@@ -15,17 +16,16 @@ class TaskCreate(forms.Form):
 							widget=forms.DateTimeInput(
 								attrs={'id':"datetimepicker",
 								'class':'form-control'}))
-"""
-class MultipleSelect(forms.Forms):
-	task_selected = forms.CheckboxField()
-"""
+
+class MultipleSelect(forms.Form):
+	task_selected = forms.ModelMultipleChoiceField(
+        queryset = Task.objects.all(),
+        widget  = forms.CheckboxSelectMultiple
+    )
+
 class TaskRemove(forms.Form):
 	title = forms.CharField(label="Title",max_length=100,widget=forms.TextInput(attrs={'required':'true'}))
 
 class TaskUpdateDeadline(forms.Form):
 	title = forms.CharField(label="Title",max_length=100,widget=forms.TextInput(attrs={'required':'true'}))
 	complete_by = forms.DateTimeField(label="Complete By",input_formats=['%d %b %Y'],widget=forms.DateTimeInput(attrs={'id':"datetimepicker"}))
-
-class TaskUpdateStatus(forms.Form):
-	title = forms.CharField(label="Title",max_length=100,widget=forms.TextInput(attrs={'required':'true'}))
-	status= forms.ChoiceField(choices=STATUS_CHOICES)

@@ -9,6 +9,7 @@
   {% csrf_token %}
   <label for="title">{{ form.title.label }}</label>
   {{ form.title }}
+  {{form.title.errors}}
   
   <label for="complete_by">{{ form.complete_by.label}}</label>
   {{ form.complete_by}}

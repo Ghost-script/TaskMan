@@ -60,7 +60,7 @@
             <td>{{ task.status }}</td>
             <td>{{ task.added_date|date:"d M, Y"  }}</td>
             <td>{{ task.deadline_date|date:"d M, Y"  }}</td>
-            <td><input type="checkbox" name="task_selected" value="{{ task.id }}"/></td>
+            <td><input type="checkbox" name="task_selected" value="{{ task.title }}"/></td>
           </tr>
           
           {% endfor %}
