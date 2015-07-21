@@ -3,7 +3,7 @@ from forms import LoginForm, RegistrationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from taskManager.forms import TaskCreate, TaskRemove, TaskUpdateDeadline, MultipleSelect
+from taskManager.forms import TaskCreate,MultipleSelect
 from taskManager.views import show_task, show_logs
 
 

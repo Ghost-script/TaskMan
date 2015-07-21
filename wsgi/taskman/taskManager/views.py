@@ -4,7 +4,7 @@ from models import Task, TaskLog
 from django.shortcuts import redirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from forms import TaskCreate, TaskRemove, TaskUpdateDeadline, MultipleSelect
+from forms import TaskCreate,MultipleSelect
 from datetime import datetime
 from django.db.models import Q
 from django.views.decorators.http import require_http_methods
