@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from taskManager.forms import TaskCreate,MultipleSelect
 from taskManager.views import show_task, show_logs
-
+from django.contrib.auth.hashers import make_password,is_password_usable
 
 def index(request):
     """
@@ -58,12 +58,16 @@ def register_user(request):
                 return render(request, 'registration.html', {'form': form})
             except User.DoesNotExist:
                 if password == confirm:
-                    user = User(username=username,
-                                email=email,
-                                password=password)
-                    user.save()
-                    form = RegistrationForm()
-                    form.message = "Success"
+                    password = make_password(password)
+                    if is_password_usable(password):
+                        user = User(username=username,
+                                    email=email,
+                                    password=password)
+                        user.save()
+                        form = RegistrationForm()
+                        form.message = "Success"
+                    else:
+                        form.message = "Password cannot be used"
                 else:
                     form.message = "Comfirm and Password field do not match"
                 return render(request, 'registration.html',
