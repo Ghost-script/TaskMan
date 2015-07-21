@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.views.decorators.http import require_http_methods
 
 
-@login_required(login_url='/login')
+@login_required(login_url='/')
 def create_task(request):
     """
     Function to create new Tasks 
@@ -51,7 +51,7 @@ def create_task(request):
                    'page': 'create'})
 
 
-@login_required(login_url='/login')
+@login_required(login_url='/')
 def update_task(request):
     """
     Edit task #to be implemented
@@ -95,7 +95,7 @@ def show_logs(request):
     return log
 
 
-
+@login_required(login_url="/")
 @require_http_methods(["POST"])
 def update_multiple(request):
     """
