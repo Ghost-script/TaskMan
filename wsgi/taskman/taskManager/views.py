@@ -78,7 +78,7 @@ def show_task(request, **kwargs):
 
     user = request.user
     if kwargs['order'] == 'desc':
-        order = kwargs['col'].desc()
+        order = "-"+kwargs['col']
     else:
         order = kwargs['col']
     task = Task.objects.filter(user=user).order_by(order).all()
