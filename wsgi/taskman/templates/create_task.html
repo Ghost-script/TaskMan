@@ -4,6 +4,7 @@
           <h1 class="page-header">Dashboard</h1>
 
 <form class="form-horizontal container-fluid"  action="" method="post">
+  {{ form.message }}{{form.error}}
  <div class="form-inline">
  <div class="form-group">
   {% csrf_token %}
