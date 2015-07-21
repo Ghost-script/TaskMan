@@ -27,6 +27,9 @@ def create_task(request):
             added = timezone.now()
             detail = form.cleaned_data['details']
             try:
+                Task.objects.get(title=title)
+                form.error = "Duplicate Title Not Allowed"
+            except Task.DoesNotExist:
                 new_task = Task(user=user,
                                 title=title,
                                 detail=detail,
@@ -36,10 +39,9 @@ def create_task(request):
                 new_task.save()
                 form = TaskCreate()
                 form.message = "Succesfully created the task"
-            except IntegrityError:
-                form.error = "Duplicate Title Not Allowed"
-            except Task.IntegrityError:
-                print "test"
+            except Exception as e:
+                #log here
+                print e
         return render(request, "create_task.html",
                       {'form': form,
                        'page': 'create'})
