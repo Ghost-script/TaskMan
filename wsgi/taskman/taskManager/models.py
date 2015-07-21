@@ -39,7 +39,7 @@ class TaskLog(models.Model):
             else:
                 temp = "{task} tasks were marked {action} by you"
         if self.action == "DELETE":
-            if self.task == 1:
+            if self.row_affected == 1:
                 temp = "{task} task was {action}d by you"
             else:
                 temp = "{task} tasks were {action}d by you"

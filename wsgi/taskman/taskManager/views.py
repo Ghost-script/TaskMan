@@ -114,7 +114,6 @@ def update_multiple(request):
                 Task.objects.filter(id__in=task_list).delete()
                 no_of_updates = len(task_list)
 
-            task_list = Task.objects.filter(id__in=task_list).all()
             if no_of_updates > 1:
                 temp = "{task1} and {others} other"
             elif no_of_updates == 1:
