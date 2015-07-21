@@ -28,10 +28,13 @@ $(document).ready(function(){
 });
 
 
+
+
+
 $(document).ready(function(){
  if ($('#message').text()!="")
     {
         $('.dropdown a').click();
-        console.log('execute');
     }
+
 });
